@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>YouTube</title>
+  <title>YouTube 2007</title>
   <style>
     body {
       background: #f1f1f1;
@@ -12,7 +12,6 @@
       color: #333;
     }
 
-    /* Шапка */
     #header {
       background: #fff;
       border-bottom: 1px solid #ccc;
@@ -40,7 +39,6 @@
       cursor: pointer;
     }
 
-    /* Сайдбар */
     #sidebar {
       float: left;
       width: 180px;
@@ -72,17 +70,11 @@
       text-decoration: underline;
     }
 
-    /* Основная область */
     #main {
       margin-left: 200px;
       padding: 12px;
     }
-    h1 {
-      font-size: 18px;
-      margin: 0 0 12px 0;
-    }
 
-    /* Карточка видео */
     .video-card {
       background: #fff;
       border: 1px solid #ddd;
@@ -100,7 +92,7 @@
       height: 360px;
       background: #000;
       overflow: hidden;
-      cursor: pointer; /* показывает, что можно кликнуть */
+      cursor: pointer;
     }
     video {
       width: 100%;
@@ -135,9 +127,8 @@
       font-weight: bold;
     }
 
-    /* Модальное окно плеера (полноэкранный режим) */
     #modal-overlay {
-      display: none; /* скрыто по умолчанию */
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -193,7 +184,6 @@
 </head>
 <body>
 
-  <!-- Шапка -->
   <div id="header">
     <a href="#" id="logo">YouTube</a>
     <span id="search-box">
@@ -203,7 +193,6 @@
     <button><a href="studio.html">Перейти в студию</a></button>
   </div>
 
-  <!-- Сайдбар -->
   <div id="sidebar">
     <div class="sidebar-section">
       <h4>Навигация</h4>
@@ -226,10 +215,9 @@
     <div class="video-card">
       <h3>Мое первое видео</h3>
 
-      <!-- Плеер в карточке -->
+      <!-- Единый путь к видео: videos/video1.mp4 -->
       <div class="video-player-wrapper" onclick="openModal('videos/video1.mp4', 'Мое первое видео')">
-        <video src="video/video-001.mp4" poster="photos/poster1.jpg" muted playsinline></video>
-        
+        <video src="videos/video1.mp4" poster="videos/poster1.jpg" muted playsinline></video>
         <div class="player-controls-overlay">
           <button class="btn btn-like" onclick="event.stopPropagation(); toggleLike(this)">Лайк</button>
           <button class="btn btn-subscribe" onclick="event.stopPropagation(); subscribe()">Подписаться</button>
@@ -242,17 +230,16 @@
     </div>
   </div>
 
-  <!-- Модальное окно (медиаплеер) -->
   <div id="modal-overlay">
     <div id="modal-player">
       <span class="modal-close" onclick="closeModal()">&times;</span>
       <span class="modal-title" id="modal-title">Видео</span>
+      <!-- controls даёт кнопки Play/Pause, громкость и т.д. -->
       <video id="modal-video" src="" controls></video>
     </div>
   </div>
 
   <script>
-    // Открыть модальное окно с видео
     function openModal(src, title) {
       const overlay = document.getElementById('modal-overlay');
       const video = document.getElementById('modal-video');
@@ -262,13 +249,10 @@
       titleEl.innerText = title;
       overlay.classList.add('active');
 
-      // Запускаем видео после загрузки метаданных
-      video.onloadedmetadata = () => {
-        video.play().catch(e => console.log('Автовоспроизведение заблокировано браузером'));
-      };
+      // Не пытаемся автоиграть — браузер часто блокирует.
+      // Пользователь сам нажмёт Play в плеере с атрибутом controls.
     }
 
-    // Закрыть модальное окно
     function closeModal() {
       const overlay = document.getElementById('modal-overlay');
       const video = document.getElementById('modal-video');
@@ -278,7 +262,6 @@
       video.currentTime = 0;
     }
 
-    // Логика лайка
     function toggleLike(btn) {
       if (btn.innerText === 'Лайк') {
         btn.innerText = 'Нравится';
@@ -293,7 +276,6 @@
       }
     }
 
-    // Логика подписки
     function subscribe() {
       alert('Вы подписаны на канал!');
     }
