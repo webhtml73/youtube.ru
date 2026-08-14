@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Studio</title>
+  <style>
+    :root {
+      --bg: #f9f9f9;
+      --panel: #ffffff;
+      --text: #282828;
+      --accent: #ff0000;
+      --border: #cccccc;
+    }
+    body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+    .header { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; gap: 20px; }
+    .logo { font-weight: bold; font-size: 18px; color: var(--accent); }
+    .nav { display: flex; gap: 20px; }
+    .nav button { background: none; border: none; cursor: pointer; font-size: 14px; color: #5f6368; }
+    .nav button.active { color: var(--text); font-weight: bold; }
+    .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+    .panel { background: var(--panel); border: 1px solid var(--border); padding: 20px; border-radius: 8px; }
+    h2 { margin-top: 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
+    th { color: #5f6368; }
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
+    .stat-card { background: var(--panel); border: 1px solid var(--border); padding: 15px; border-radius: 6px; }
+    .stat-value { font-size: 24px; font-weight: bold; }
+    .channel-info { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+    .avatar-box {
+      width: 80px; height: 80px; background: #ddd; border-radius: 50%; overflow: hidden; position: relative;
+    }
+    .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+    .upload-section, .profile-section { margin-top: 20px; }
+    input, textarea { padding: 8px; border: 1px solid var(--border); border-radius: 4px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+    button.primary {
+      background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer;
+    }
+    .video-details-block { margin-top: 15px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #eee; }
+    .view-btn {
+      display: inline-block; margin-top: 8px; padding: 6px 12px; background: #333; color: white; text-decoration: none; border-radius: 4px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">YouTube Studio</div>
+    <div class="nav">
+      <button class="active" onclick="switchTab('dashboard')">Панель управления</button>
+      <button onclick="switchTab('content')">Контент</button>
+      <button onclick="switchTab('profile')">Профиль</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Панель управления -->
+    <div id="dashboard" class="panel">
+      <h2>Панель управления каналом</h2>
+      <div class="channel-info">
+        <div class="avatar-box" id="channel-avatar-box"></div>
+        <div>
+          <h3 id="channel-name">Новый канал</h3>
+          <p>Дата создания: <span id="channel-date">—</span></p>
+          <p>Описание: <span id="channel-desc">—</span></p>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-views">0</div>
+          <div>Просмотры</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-subs">0</div>
+          <div>Подписчики</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-videos">0</div>
+          <div>Видео</div>
+        </div>
+      </div>
+      <div style="margin-top:20px;">
+        <h3>Сводка по каналу</h3>
+        <p>Последний заход: <span id="last-visit">—</span></p>
+        <p>Сегодняшний прирост подписчиков: <span id="today-subs-gain">0</span></p>
+      </div>
+    </div>
+
+    <!-- Контент -->
+    <div id="content" class="panel" style="display:none;">
+      <h2>Контент</h2>
+      <div class="upload-section">
+        <h3>Загрузить видео</h3>
+        <input type="file" id="video-file" accept="video/*">
+        <label>Название видео:</label><input type="text" id="video-title" placeholder="Название видео">
+        <label>Тема:</label><input type="text" id="video-topic" placeholder="Например: Arduino, LCD">
+        <label>Описание:</label><textarea id="video-desc" rows="3" placeholder="Описание видео..."></textarea>
+        <!-- Автор будет подставлен автоматически -->
+        <button class="primary" onclick="simulateUpload()">Загрузить</button>
+      </div>
+      <h3>Ваши видео</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Просмотры</th>
+            <th>Лайки</th>
+            <th>Дата</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="video-list"></tbody>
+      </table>
+    </div>
+
+    <!-- Профиль -->
+    <div id="profile" class="panel" style="display:none;">
+      <h2>Редактировать профиль канала</h2>
+      <div class="profile-section">
+        <label>Название канала:</label>
+        <input type="text" id="profile-name" placeholder="Название канала">
+        <label>Описание канала:</label>
+        <textarea id="profile-desc" rows="4" placeholder="О канале..."></textarea>
+        <label>Фото канала (URL картинки):</label>
+        <input type="text" id="profile-avatar-url" placeholder="https://...">
+        <button class="primary" onclick="saveProfile()">Сохранить профиль</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ================= НАСТРОЙКИ РАНДОМА (меняй здесь) =================
+    const RANDOM_VIEWS_MIN = 1;
+    const RANDOM_VIEWS_MAX = 10;
+
+    const RANDOM_LIKES_MIN = 0;
+    const RANDOM_LIKES_MAX = 1;
+
+    const RANDOM_SUBS_PER_DAY_MIN = 1;
+    const RANDOM_SUBS_PER_DAY_MAX = 5;
+    // =====================================================================
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    let channelData = JSON.parse(localStorage.getItem('yt_studio_channel')) || null;
+
+    if (!channelData) {
+      const now = new Date();
+      channelData = {
+        name: 'Новый канал',
+        description: '',
+        created: now.toISOString(),
+        subscribers: 0,
+        totalViews: 0,
+        videos: [],
+        lastVisitDate: null,
+        todaySubsGain: 0,
+        avatarUrl: null
+      };
+      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+    }
+
+    // Обновление статистики при каждом заходе
+    function updateStatsOnVisit() {
+      const now = new Date();
+      const todayDateStr = now.toISOString().split('T')[0];
+
+      if (!channelData.lastVisitDate) {
+        channelData.lastVisitDate = todayDateStr;
+      } else {
+        if (channelData.lastVisitDate !== todayDateStr) {
+          const subsGain = getRandomInt(RANDOM_SUBS_PER_DAY_MIN, RANDOM_SUBS_PER_DAY_MAX);
+          channelData.subscribers += subsGain;
+          channelData.todaySubsGain = subsGain;
+          channelData.lastVisitDate = todayDateStr;
+        } else {
+          channelData.todaySubsGain = 0;
+        }
+      }
+
+      // Увеличиваем просмотры и лайки у всех видео при каждом заходе
+      channelData.videos.forEach(v => {
+        v.views += getRandomInt(RANDOM_VIEWS_MIN, RANDOM_VIEWS_MAX);
+        v.likes += getRandomInt(RANDOM_LIKES_MIN, RANDOM_LIKES_MAX);
+      });
+
+      channelData.totalViews = channelData.videos.reduce((sum, v) => sum + v.views, 0);
+      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+    }
+
+    updateStatsOnVisit();
+
+    // Отрисовка данных канала
+    function renderChannel() {
+      document.getElementById('channel-name').textContent = channelData.name;
+      document.getElementById('channel-date').textContent = new Date(channelData.created).toLocaleDateString();
+      document.getElementById('channel-desc').textContent = channelData.description || '—';
+      document.getElementById('stat-views').textContent = channelData.totalViews.toLocaleString();
+      document.getElementById('stat-subs').textContent = channelData.subscribers.toLocaleString();
+      document.getElementById('stat-videos').textContent = channelData.videos.length.toLocaleString();
+      document.getElementById('last-visit').textContent = channelData.lastVisitDate || '—';
+      document.getElementById('today-subs-gain').textContent = channelData.todaySubsGain;
+
+      const avatarBox = document.getElementById('channel-avatar-box');
+      if (channelData.avatarUrl) {
+        avatarBox.innerHTML = `<img src="${channelData.avatarUrl}" alt="Аватар">`;
+      } else {
+        avatarBox.innerHTML = '';
+      }
+    }
+    renderChannel();
+
+    // Сохранение профиля
+    function saveProfile() {
+      const name = document.getElementById('profile-name').value.trim();
+      const desc = document.getElementById('profile-desc').value.trim();
+      const avatarUrl = document.getElementById('profile-avatar-url').value.trim();
+
+      if (!name) { alert('Название канала обязательно'); return; }
+
+      channelData.name = name;
+      channelData.description = desc;
+      if (avatarUrl) channelData.avatarUrl = avatarUrl;
+      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+      renderChannel();
+      alert('Профиль сохранён!');
+    }
+
+    // Предзаполнение полей профиля при открытии вкладки
+    function loadProfileFields() {
+      document.getElementById('profile-name').value = channelData.name || '';
+      document.getElementById('profile-desc').value = channelData.description || '';
+      document.getElementById('profile-avatar-url').value = channelData.avatarUrl || '';
+    }
+
+    // Загрузка видео (имитация)
+    function simulateUpload() {
+      const fileInput = document.getElementById('video-file');
+      const title = document.getElementById('video-title').value.trim();
+      const topic = document.getElementById('video-topic').value.trim();
+      const desc = document.getElementById('video-desc').value.trim();
+
+      if (!title) { alert('Укажите название видео'); return; }
+      if (fileInput.files.length === 0) { alert('Выберите файл видео'); return; }
+
+      const fileName = fileInput.files[0].name;
+      const now = new Date();
+
+      const newVideo = {
+        title: title,
+        topic: topic,
+        description: desc,
+        author: channelData.name, // АВТОР = название канала
+        views: 0,
+        likes: 0,
+        date: now.toISOString(),
+        externalUrl: '' // сюда можно вставить ссылку на реальное видео
+      };
+
+      channelData.videos.push(newVideo);
+      channelData.totalViews = channelData.videos.reduce((sum, v) => sum + v.views, 0);
+      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+
+      renderVideos();
+      alert('Видео загружено.');
+    }
+
+    // Добавление ссылки на реальное видео и кнопки «Посмотреть»
+    function addExternalLink(index) {
+      const url = prompt('Вставьте ссылку на видео (YouTube/другое):');
+      if (!url) return;
+      channelData.videos[index].externalUrl = url;
+      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+      renderVideos();
+    }
+
+    function renderVideos() {
+      const tbody = document.getElementById('video-list');
+      tbody.innerHTML = channelData.videos.map((v, i) => `
+        <tr>
+          <td>${v.title}</td>
+          <td>${v.views.toLocaleString()}</td>
+          <td>${v.likes.toLocaleString()}</td>
+          <td>${new Date(v.date).toLocaleDateString()}</td>
+          <td>
+            <div class="video-details-block">
+              <div><strong>Тема:</strong> ${v.topic || '—'}</div>
+              <div><strong>Описание:</strong> ${v.description || '—'}</div>
+              <div><strong>Автор:</strong> ${v.author}</div>
+              ${v.externalUrl ? `
+                <div style="margin-top:8px;">
+                  <strong>Ссылка на видео:</strong> <a href="${v.externalUrl}" target="_blank" style="color:#007bff; text-decoration:underline;">${v.externalUrl}</a>
+                  <br>
+                  <a href="${v.externalUrl}" target="_blank" class="view-btn">Посмотреть</a>
+                </div>
+              ` : `
+                <button style="font-size:12px; padding:4px 8px;" onclick="addExternalLink(${i})">Добавить ссылку на видео</button>
+              `}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+    renderVideos();
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
+      document.getElementById(tabId).style.display = 'block';
+      document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (tabId === 'profile') {
+        loadProfileFields();
+      }
+    }
+  </script>
+</body>
+</html>
