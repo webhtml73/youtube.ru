@@ -112,6 +112,7 @@
       right: 8px;
       display: flex;
       gap: 8px;
+      z-index: 10; /* чтобы кнопки были поверх ссылки */
     }
     .btn {
       background: #fff;
@@ -150,7 +151,8 @@
     <span id="search-box">
       <input type="text" placeholder="Поиск видео">
       <button>Найти</button>
-    </span>   <button><a href="studio.html">Перейти в студию</button>
+    </span>
+    <button><a href="studio.html">Перейти в студию</a></button>
   </div>
 
   <!-- Сайдбар -->
@@ -175,17 +177,25 @@
   <div id="main">
     <div class="video-card">
       <h3>Мое первое видео</h3>
-      <div class="video-player-wrapper">
-        <video src="videos/video1.mp4" poster="videos/poster1.jpg"></video>
-        <div class="player-controls-overlay">
-          <button class="btn btn-like" onclick="toggleLike(this)">Лайк</button>
-          <button class="btn btn-subscribe" onclick="subscribe()">Подписаться</button>
+
+      <!-- Ссылка на mediaplayer, оборачивает плеер -->
+      <a href="mediaplayer.html" style="display: block; text-decoration: none;">
+        <div class="video-player-wrapper">
+          <video src="videos/video1.mp4" poster="videos/poster1.jpg" muted playsinline></video>
+          
+          <!-- Кнопки остаются поверх ссылки благодаря z-index -->
+          <div class="player-controls-overlay">
+            <button class="btn btn-like" onclick="event.stopPropagation(); toggleLike(this)">Лайк</button>
+            <button class="btn btn-subscribe" onclick="event.stopPropagation(); subscribe()">Подписаться</button>
+          </div>
         </div>
-      </div>
+      </a>
+
       <div class="channel-info">
         Канал: <span class="channel-name">FreshHappyRBX</span>
       </div>
     </div>
+  </div>
 
   <script>
     // Простая логика лайка (меняет текст/стиль)
