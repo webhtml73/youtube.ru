@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>YouTube</title>
+  <title>YouTube RU</title>
   <style>
     body {
       background: #f1f1f1;
@@ -127,6 +127,7 @@
       font-weight: bold;
     }
 
+    /* Модальное окно */
     #modal-overlay {
       display: none;
       position: fixed;
@@ -190,7 +191,7 @@
       <input type="text" placeholder="Поиск видео">
       <button>Найти</button>
     </span>
-    <button><a href="studio.html">Перейти в студию</a></button>
+    <button><a href="studio.html">Студия</a></button>
   </div>
 
   <div id="sidebar">
@@ -213,11 +214,15 @@
 
   <div id="main">
     <div class="video-card">
-      <h3>Мое первое видео</h3>
+      <h3>Моё первое видео</h3>
 
-      <!-- Единый путь к видео: videos/video1.mp4 -->
-      <div class="video-player-wrapper" onclick="openModal('videos/video1.mp4', 'Мое первое видео')">
-        <video src="video/video1.webm" poster="photos/poster1.jpg" muted playsinline></video>
+      <!-- Плеер в карточке: сначала WebM, потом MP4 -->
+      <div class="video-player-wrapper" onclick="openModal('video/video1.webm', 'Моё первое видео')">
+        <video poster="video/poster1.jpg" muted playsinline>
+          <source src="video/video1.webm" type="video/webm">
+          <source src="video/video1.mp4" type="video/mp4">
+        </video>
+        
         <div class="player-controls-overlay">
           <button class="btn btn-like" onclick="event.stopPropagation(); toggleLike(this)">Лайк</button>
           <button class="btn btn-subscribe" onclick="event.stopPropagation(); subscribe()">Подписаться</button>
@@ -230,12 +235,12 @@
     </div>
   </div>
 
+  <!-- Модальное окно -->
   <div id="modal-overlay">
     <div id="modal-player">
       <span class="modal-close" onclick="closeModal()">&times;</span>
       <span class="modal-title" id="modal-title">Видео</span>
-      <!-- controls даёт кнопки Play/Pause, громкость и т.д. -->
-      <video id="modal-video" src="" controls></video>
+      <video id="modal-video" controls></video>
     </div>
   </div>
 
@@ -248,9 +253,6 @@
       video.src = src;
       titleEl.innerText = title;
       overlay.classList.add('active');
-
-      // Не пытаемся автоиграть — браузер часто блокирует.
-      // Пользователь сам нажмёт Play в плеере с атрибутом controls.
     }
 
     function closeModal() {
@@ -265,12 +267,10 @@
     function toggleLike(btn) {
       if (btn.innerText === 'Лайк') {
         btn.innerText = 'Нравится';
-        btn.style.background = '#fff';
         btn.style.color = '#ff0000';
         btn.style.borderColor = '#ff0000';
       } else {
         btn.innerText = 'Лайк';
-        btn.style.background = '#fff';
         btn.style.color = '#333';
         btn.style.borderColor = '#aaa';
       }
