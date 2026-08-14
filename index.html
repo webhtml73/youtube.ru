@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>YouTube 2007</title>
+  <style>
+    body {
+      background: #f1f1f1;
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    /* Шапка как в 2007 */
+    #header {
+      background: #fff;
+      border-bottom: 1px solid #ccc;
+      padding: 8px 12px;
+    }
+    #logo {
+      font-weight: bold;
+      font-size: 24px;
+      color: #ff0000;
+      text-decoration: none;
+    }
+    #search-box {
+      display: inline-block;
+      margin-left: 16px;
+    }
+    #search-box input {
+      border: 1px solid #999;
+      padding: 4px 6px;
+      width: 220px;
+    }
+    #search-box button {
+      border: 1px solid #666;
+      background: #eee;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+
+    /* Боковая панель (слева) */
+    #sidebar {
+      float: left;
+      width: 180px;
+      padding: 12px;
+    }
+    .sidebar-section {
+      margin-bottom: 14px;
+    }
+    .sidebar-section h4 {
+      font-size: 13px;
+      margin: 8px 0 6px 0;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 4px;
+    }
+    .sidebar-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar-section li {
+      margin: 4px 0;
+    }
+    .sidebar-section a {
+      text-decoration: none;
+      color: #0066cc;
+      font-size: 13px;
+    }
+    .sidebar-section a:hover {
+      text-decoration: underline;
+    }
+
+    /* Основная область */
+    #main {
+      margin-left: 200px; /* отступ под сайдбар */
+      padding: 12px;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0 0 12px 0;
+    }
+
+    /* Карточка видео */
+    .video-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 12px;
+      width: 640px;
+    }
+    .video-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 15px;
+    }
+    .video-player-wrapper {
+      position: relative;
+      width: 640px;
+      height: 360px;
+      background: #000;
+      overflow: hidden;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+    }
+    /* Кнопки поверх плеера */
+    .player-controls-overlay {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .btn {
+      background: #fff;
+      border: 1px solid #aaa;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      color: #333;
+    }
+    .btn:hover {
+      border-color: #666;
+    }
+    .channel-info {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #555;
+    }
+    .channel-name {
+      color: #0066cc;
+      font-weight: bold;
+    }
+
+    /* Адаптив для маленьких экранов (опционально) */
+    @media (max-width: 768px) {
+      #sidebar { display: none; }
+      #main { margin-left: 0; }
+      .video-card, .video-player-wrapper { width: 100%; max-width: 640px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Шапка -->
+  <div id="header">
+    <a href="#" id="logo">YouTube</a>
+    <span id="search-box">
+      <input type="text" placeholder="Поиск видео">
+      <button>Найти</button>
+    </span>
+  </div>
+
+  <!-- Сайдбар -->
+  <div id="sidebar">
+    <div class="sidebar-section">
+      <h4>Навигация</h4>
+      <ul>
+        <li><a href="#">Главная</a></li>
+        <li><a href="#">Подписки</a></li>
+        <li><a href="#">Избранное</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <h4>Каналы</h4>
+      <ul>
+        <li><a href="#">Лучшие каналы</a></li>
+        <li><a href="#">Новые каналы</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Основной контент -->
+  <div id="main">
+    <h1>Рекомендованные видео</h1>
+    <!-- Видео 1 -->
+    <div class="video-card">
+      <h3>Пример видео 1</h3>
+      <div class="video-player-wrapper">
+        <video src="videos/video1.mp4" poster="videos/poster1.jpg"></video>
+        <div class="player-controls-overlay">
+          <button class="btn btn-like" onclick="toggleLike(this)">Лайк</button>
+          <button class="btn btn-subscribe" onclick="subscribe()">Подписаться</button>
+        </div>
+      </div>
+      <div class="channel-info">
+        Канал: <span class="channel-name">TestChannel</span> · 1234 подписчика
+      </div>
+    </div>
+
+    <!-- Видео 2 -->
+    <div class="video-card">
+      <h3>Пример видео 2</h3>
+      <div class="video-player-wrapper">
+        <video src="videos/video2.mp4" poster="videos/poster2.jpg"></video>
+        <div class="player-controls-overlay">
+          <button class="btn btn-like" onclick="toggleLike(this)">Лайк</button>
+          <button class="btn btn-subscribe" onclick="subscribe()">Подписаться</button>
+        </div>
+      </div>
+      <div class="channel-info">
+        Канал: <span class="channel-name">AnotherChannel</span> · 987 подписчиков
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Простая логика лайка (меняет текст/стиль)
+    function toggleLike(btn) {
+      if (btn.innerText === 'Лайк') {
+        btn.innerText = 'Нравится';
+        btn.style.background = '#fff';
+        btn.style.color = '#ff0000';
+        btn.style.borderColor = '#ff0000';
+      } else {
+        btn.innerText = 'Лайк';
+        btn.style.background = '#fff';
+        btn.style.color = '#333';
+        btn.style.borderColor = '#aaa';
+      }
+    }
+
+    // Простая логика подписки (всплывающее сообщение)
+    function subscribe() {
+      alert('Вы подписаны на канал!');
+    }
+  </script>
+</body>
+</html>
