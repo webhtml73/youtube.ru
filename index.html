@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>YouTube 2007</title>
+  <title>YouTube</title>
   <style>
     body {
       background: #f1f1f1;
@@ -172,12 +172,9 @@
     </div>
   </div>
 
-  <!-- Основной контент -->
   <div id="main">
-    <h1>Рекомендованные видео</h1>
-    <!-- Видео 1 -->
     <div class="video-card">
-      <h3>Пример видео 1</h3>
+      <h3>Мое первое видео</h3>
       <div class="video-player-wrapper">
         <video src="videos/video1.mp4" poster="videos/poster1.jpg"></video>
         <div class="player-controls-overlay">
@@ -186,25 +183,9 @@
         </div>
       </div>
       <div class="channel-info">
-        Канал: <span class="channel-name">TestChannel</span> · 1234 подписчика
+        Канал: <span class="channel-name">FreshHappyRBX</span>
       </div>
     </div>
-
-    <!-- Видео 2 -->
-    <div class="video-card">
-      <h3>Пример видео 2</h3>
-      <div class="video-player-wrapper">
-        <video src="videos/video2.mp4" poster="videos/poster2.jpg"></video>
-        <div class="player-controls-overlay">
-          <button class="btn btn-like" onclick="toggleLike(this)">Лайк</button>
-          <button class="btn btn-subscribe" onclick="subscribe()">Подписаться</button>
-        </div>
-      </div>
-      <div class="channel-info">
-        Канал: <span class="channel-name">AnotherChannel</span> · 987 подписчиков
-      </div>
-    </div>
-  </div>
 
   <script>
     // Простая логика лайка (меняет текст/стиль)
