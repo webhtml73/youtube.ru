@@ -189,287 +189,299 @@
     </div>
   </div>
 
-  <script>
-    function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+<script>
+  // --- ГЛАВНАЯ ФУНКЦИЯ ДЛЯ ВКЛАДОК (должна быть первой!) ---
+  function switchTab(tabId) {
+    // Подсветка активной кнопки
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    if (event && event.target) {
+      event.target.classList.add('active');
     }
 
-    let channelData = JSON.parse(localStorage.getItem('yt_studio_channel')) || null;
-    let settings = JSON.parse(localStorage.getItem('yt_studio_settings')) || {
-      autoSubs: true,
-      subsMin: 1,
-      subsMax: 5,
-      viewsMin: 1,
-      viewsMax: 10,
-      likesMin: 0,
-      likesMax: 1,
-      accentColor: '#ff0000',
-      showStats: true
+    // Скрыть все панели
+    ['dashboard', 'content', 'profile', 'settings'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    // Показать нужную панель
+    const activeEl = document.getElementById(tabId);
+    if (activeEl) activeEl.style.display = 'block';
+  }
+
+  // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  let channelData = JSON.parse(localStorage.getItem('yt_studio_channel')) || null;
+  let settings = JSON.parse(localStorage.getItem('yt_studio_settings')) || {
+    autoSubs: true,
+    subsMin: 1,
+    subsMax: 5,
+    viewsMin: 1,
+    viewsMax: 10,
+    likesMin: 0,
+    likesMax: 1,
+    accentColor: '#ff0000',
+    showStats: true
+  };
+
+  if (!channelData) {
+    const now = new Date();
+    channelData = {
+      name: 'Новый канал',
+      description: '',
+      created: now.toISOString(),
+      subscribers: 0,
+      totalViews: 0,
+      videos: [],
+      lastVisitDate: null,
+      todaySubsGain: 0,
+      avatarUrl: null,
+      lastSubsUpdate: null
     };
+    localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+  }
 
-    if (!channelData) {
-      const now = new Date();
-      channelData = {
-        name: 'Новый канал',
-        description: '',
-        created: now.toISOString(),
-        subscribers: 0,
-        totalViews: 0,
-        videos: [],
-        lastVisitDate: null,
-        todaySubsGain: 0,
-        avatarUrl: null,
-        lastSubsUpdate: null
-      };
+  function loadSettings() {
+    const el = id => document.getElementById(id);
+    el('setting-auto-subs').value = settings.autoSubs ? '1' : '0';
+    el('setting-subs-min').value = settings.subsMin;
+    el('setting-subs-max').value = settings.subsMax;
+    el('setting-views-min').value = settings.viewsMin;
+    el('setting-views-max').value = settings.viewsMax;
+    el('setting-likes-min').value = settings.likesMin;
+    el('setting-likes-max').value = settings.likesMax;
+    el('setting-accent-color').value = settings.accentColor;
+    el('setting-show-stats').value = settings.showStats ? '1' : '0';
+
+    document.documentElement.style.setProperty('--accent', settings.accentColor);
+  }
+
+  function saveSettings() {
+    settings.autoSubs = document.getElementById('setting-auto-subs').value === '1';
+    settings.subsMin = parseInt(document.getElementById('setting-subs-min').value, 10);
+    settings.subsMax = parseInt(document.getElementById('setting-subs-max').value, 10);
+    settings.viewsMin = parseInt(document.getElementById('setting-views-min').value, 10);
+    settings.viewsMax = parseInt(document.getElementById('setting-views-max').value, 10);
+    settings.likesMin = parseInt(document.getElementById('setting-likes-min').value, 10);
+    settings.likesMax = parseInt(document.getElementById('setting-likes-max').value, 10);
+    settings.accentColor = document.getElementById('setting-accent-color').value;
+    settings.showStats = document.getElementById('setting-show-stats').value === '1';
+
+    localStorage.setItem('yt_studio_settings', JSON.stringify(settings));
+    document.documentElement.style.setProperty('--accent', settings.accentColor);
+  }
+
+  // --- АВТОПРИРОСТ ПОДПИСЧИКОВ ---
+  function autoIncrementSubscribers() {
+    if (!settings.autoSubs) return;
+
+    const now = Date.now();
+    const twoHoursMs = 2 * 60 * 60 * 1000;
+
+    if (!channelData.lastSubsUpdate) {
+      channelData.lastSubsUpdate = now;
       localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+      return;
     }
 
-    function loadSettings() {
-      document.getElementById('setting-auto-subs').value = settings.autoSubs ? '1' : '0';
-      document.getElementById('setting-subs-min').value = settings.subsMin;
-      document.getElementById('setting-subs-max').value = settings.subsMax;
-      document.getElementById('setting-views-min').value = settings.viewsMin;
-      document.getElementById('setting-views-max').value = settings.viewsMax;
-      document.getElementById('setting-likes-min').value = settings.likesMin;
-      document.getElementById('setting-likes-max').value = settings.likesMax;
-      document.getElementById('setting-accent-color').value = settings.accentColor;
-      document.getElementById('setting-show-stats').value = settings.showStats ? '1' : '0';
+    const timeSinceLast = now - channelData.lastSubsUpdate;
 
-      document.documentElement.style.setProperty('--accent', settings.accentColor);
-    }
-
-    function saveSettings() {
-      settings.autoSubs = document.getElementById('setting-auto-subs').value === '1';
-      settings.subsMin = parseInt(document.getElementById('setting-subs-min').value) || 0;
-      settings.subsMax = parseInt(document.getElementById('setting-subs-max').value) || 1;
-      settings.viewsMin = parseInt(document.getElementById('setting-views-min').value) || 1;
-      settings.viewsMax = parseInt(document.getElementById('setting-views-max').value) || 10;
-      settings.likesMin = parseInt(document.getElementById('setting-likes-min').value) || 0;
-      settings.likesMax = parseInt(document.getElementById('setting-likes-max').value) || 1;
-      settings.accentColor = document.getElementById('setting-accent-color').value;
-      settings.showStats = document.getElementById('setting-show-stats').value === '1';
-
-      document.documentElement.style.setProperty('--accent', settings.accentColor);
-      localStorage.setItem('yt_studio_settings', JSON.stringify(settings));
-    }
-      const now = new Date();
-      const todayStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
-
-      // Если это первый визит или день сменился — сбрасываем дневной прирост
-      if (!channelData.lastVisitDate || channelData.lastVisitDate !== todayStr) {
-        channelData.todaySubsGain = 0;
-        channelData.lastVisitDate = todayStr;
-      }
-
-      // При каждом заходе добавляем просмотры и лайки (случайные в диапазоне настроек)
-      channelData.videos.forEach(v => {
-        const viewsGain = getRandomInt(settings.viewsMin, settings.viewsMax);
-        const likesGain = getRandomInt(settings.likesMin, settings.likesMax);
-
-        v.views += viewsGain;
-        v.likes += likesGain;
-      });
-
-      recalculateTotals();
-      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-      updateDashboardStats();
-    }
-
-    // Прирост подписчиков каждые 2 часа (только если есть хотя бы одно видео)
-    function autoIncrementSubscribers() {
-      if (!settings.autoSubs) return;
-
-      const now = Date.now();
-      const twoHoursMs = 2 * 60 * 60 * 1000;
-
-      if (!channelData.lastSubsUpdate) {
+    if (timeSinceLast >= twoHoursMs) {
+      if (channelData.videos.length > 0) {
+        const subsGain = getRandomInt(settings.subsMin, settings.subsMax);
+        channelData.subscribers += subsGain;
+        channelData.todaySubsGain += subsGain;
         channelData.lastSubsUpdate = now;
         localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-        return;
-      }
-
-      const timeSinceLast = now - channelData.lastSubsUpdate;
-
-      if (timeSinceLast >= twoHoursMs) {
-        if (channelData.videos.length > 0) {
-          const subsGain = getRandomInt(settings.subsMin, settings.subsMax);
-          channelData.subscribers += subsGain;
-          channelData.todaySubsGain += subsGain; // считаем в дневной прирост
-          channelData.lastSubsUpdate = now;
-          localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-          updateDashboardStats();
-        } else {
-          // Даже если видео нет — обновляем время, чтобы не спамить приростом при появлении первого видео
-          channelData.lastSubsUpdate = now;
-          localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-        }
-      }
-    }
-
-    // Пересчитать итоговые метрики канала
-    function recalculateTotals() {
-      let totalViews = 0;
-      let totalLikes = 0;
-      channelData.videos.forEach(v => {
-        totalViews += v.views;
-        totalLikes += v.likes;
-      });
-      channelData.totalViews = totalViews;
-
-      const avgViews = channelData.videos.length
-        ? Math.round(totalViews / channelData.videos.length)
-        : 0;
-
-      const likeRatio = channelData.videos.length && totalViews > 0
-        ? Math.round((totalLikes / totalViews) * 100)
-        : 0;
-
-      return { totalViews, totalLikes, avgViews, likeRatio };
-    }
-
-    // Обновить цифры на дашборде
-    function updateDashboardStats() {
-      const stats = recalculateTotals();
-
-      const el = id => document.getElementById(id);
-      el('stat-views').textContent = stats.totalViews.toLocaleString();
-      el('stat-subs').textContent = channelData.subscribers.toLocaleString();
-      el('stat-videos').textContent = channelData.videos.length;
-      el('stat-avg-views').textContent = stats.avgViews.toLocaleString();
-      el('stat-like-ratio').textContent = stats.likeRatio + '%';
-      el('stat-total-likes').textContent = stats.totalLikes.toLocaleString();
-
-      el('today-subs-gain').textContent = channelData.todaySubsGain;
-      el('auto-subs-status').textContent = settings.autoSubs ? 'включён' : 'выключен';
-
-      const dateObj = new Date(channelData.created);
-      el('channel-date').textContent = dateObj.toLocaleDateString('ru-RU');
-      el('channel-name').textContent = channelData.name;
-      el('channel-desc').textContent = channelData.description || '—';
-
-      const avatarBox = el('channel-avatar-box');
-      if (channelData.avatarUrl) {
-        avatarBox.innerHTML = `<img src="${channelData.avatarUrl}" alt="avatar">`;
+        updateDashboardStats();
       } else {
-        avatarBox.innerHTML = '';
+        channelData.lastSubsUpdate = now;
+        localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
       }
     }
+  }
 
-    // Показать список видео в таблице
-    function renderVideoList() {
-      const tbody = document.getElementById('video-list');
-      tbody.innerHTML = '';
+  // --- ПЕРЕСЧЁТ СТАТИСТИКИ ---
+  function recalculateTotals() {
+    let totalViews = 0;
+    let totalLikes = 0;
+    channelData.videos.forEach(v => {
+      totalViews += v.views;
+      totalLikes += v.likes;
+    });
+    channelData.totalViews = totalViews;
 
-      channelData.videos.forEach((v, idx) => {
-        const tr = document.createElement('tr');
-        const dateObj = new Date(v.date);
-        tr.innerHTML = `
-          <td>${v.title}</td>
-          <td>${v.views.toLocaleString()}</td>
-          <td>${v.likes.toLocaleString()}</td>
-          <td>${dateObj.toLocaleDateString('ru-RU')}</td>
-          <td><button class="primary" style="padding:4px 8px;font-size:12px;" onclick="deleteVideo(${idx})">Удалить</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+    const avgViews = channelData.videos.length
+      ? Math.round(totalViews / channelData.videos.length)
+      : 0;
+
+    const likeRatio = channelData.videos.length && totalViews > 0
+      ? Math.round((totalLikes / totalViews) * 100)
+      : 0;
+
+    return { totalViews, totalLikes, avgViews, likeRatio };
+  }
+
+  // --- ОБНОВЛЕНИЕ ЦИФР НА ДАШБОРДЕ ---
+  function updateDashboardStats() {
+    const stats = recalculateTotals();
+    const el = id => document.getElementById(id);
+
+    if (el('stat-views')) el('stat-views').textContent = stats.totalViews.toLocaleString();
+    if (el('stat-subs')) el('stat-subs').textContent = channelData.subscribers.toLocaleString();
+    if (el('stat-videos')) el('stat-videos').textContent = channelData.videos.length;
+    if (el('stat-avg-views')) el('stat-avg-views').textContent = stats.avgViews.toLocaleString();
+    if (el('stat-like-ratio')) el('stat-like-ratio').textContent = stats.likeRatio + '%';
+    if (el('stat-total-likes')) el('stat-total-likes').textContent = stats.totalLikes.toLocaleString();
+
+    if (el('today-subs-gain')) el('today-subs-gain').textContent = channelData.todaySubsGain;
+    if (el('auto-subs-status')) el('auto-subs-status').textContent = settings.autoSubs ? 'включён' : 'выключен';
+
+    const dateObj = new Date(channelData.created);
+    if (el('channel-date')) el('channel-date').textContent = dateObj.toLocaleDateString('ru-RU');
+    if (el('channel-name')) el('channel-name').textContent = channelData.name;
+    if (el('channel-desc')) el('channel-desc').textContent = channelData.description || '—';
+
+    const avatarBox = el('channel-avatar-box');
+    if (avatarBox) {
+      avatarBox.innerHTML = channelData.avatarUrl
+        ? `<img src="${channelData.avatarUrl}" alt="avatar">`
+        : '';
+    }
+  }
+
+  // --- ОТРИСОВКА СПИСКА ВИДЕО ---
+  function renderVideoList() {
+    const tbody = document.getElementById('video-list');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    channelData.videos.forEach((v, idx) => {
+      const tr = document.createElement('tr');
+      const dateObj = new Date(v.date);
+      tr.innerHTML = `
+        <td>${v.title}</td>
+        <td>${v.views.toLocaleString()}</td>
+        <td>${v.likes.toLocaleString()}</td>
+        <td>${dateObj.toLocaleDateString('ru-RU')}</td>
+        <td><button class="primary" style="padding:4px 8px;font-size:12px;" onclick="deleteVideo(${idx})">Удалить</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function deleteVideo(index) {
+    channelData.videos.splice(index, 1);
+    recalculateTotals();
+    localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+    renderVideoList();
+    updateDashboardStats();
+  }
+
+  // --- ЗАГРУЗКА ВИДЕО (ИМИТАЦИЯ) ---
+  function simulateUpload() {
+    const title = document.getElementById('video-title')?.value.trim();
+    if (!title) {
+      alert('Введите название видео');
+      return;
     }
 
-    function deleteVideo(index) {
-      channelData.videos.splice(index, 1);
-      recalculateTotals();
-      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-      renderVideoList();
-      updateDashboardStats();
+    const video = {
+      title,
+      topic: document.getElementById('video-topic')?.value.trim() || '',
+      description: document.getElementById('video-desc')?.value.trim() || '',
+      date: new Date().toISOString(),
+      views: 0,
+      likes: 0
+    };
+
+    channelData.videos.push(video);
+    recalculateTotals();
+    localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+
+    ['video-title', 'video-topic', 'video-desc'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+
+    renderVideoList();
+    updateDashboardStats();
+    alert('Видео добавлено!');
+  }
+
+  // --- СОХРАНЕНИЕ ПРОФИЛЯ ---
+  function saveProfile() {
+    const name = document.getElementById('profile-name')?.value.trim();
+    const desc = document.getElementById('profile-desc')?.value.trim();
+    const avatarUrl = document.getElementById('profile-avatar-url')?.value.trim();
+
+    if (!name) {
+      alert('Укажите название канала');
+      return;
     }
 
-    // Имитация загрузки видео (без реального файла — просто добавляем запись)
-    function simulateUpload() {
-      const title = document.getElementById('video-title').value.trim();
-      if (!title) {
-        alert('Введите название видео');
-        return;
-      }
+    channelData.name = name;
+    channelData.description = desc;
+    channelData.avatarUrl = avatarUrl;
 
-      const video = {
-        title,
-        topic: document.getElementById('video-topic').value.trim(),
-        description: document.getElementById('video-desc').value.trim(),
-        date: new Date().toISOString(),
-        views: 0,
-        likes: 0
-      };
+    localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+    updateDashboardStats();
+    alert('Профиль сохранён');
+  }
 
-      channelData.videos.push(video);
-      recalculateTotals();
-      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+  // --- СБРОС КАНАЛА ---
+  function resetChannel() {
+    if (!confirm('Вы уверены? Все данные канала будут удалены.')) return;
+    const now = new Date();
+    channelData = {
+      name: 'Новый канал',
+      description: '',
+      created: now.toISOString(),
+      subscribers: 0,
+      totalViews: 0,
+      videos: [],
+      lastVisitDate: null,
+      todaySubsGain: 0,
+      avatarUrl: null,
+      lastSubsUpdate: null
+    };
+    localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+    updateDashboardStats();
+    renderVideoList();
+    alert('Канал сброшен');
+  }
 
-      document.getElementById('video-title').value = '';
-      document.getElementById('video-topic').value = '';
-      document.getElementById('video-desc').value = '';
+  // --- СТАТИСТИКА ПРИ ЗАХОДЕ ---
+  function updateStatsOnVisit() {
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
 
-      renderVideoList();
-      updateDashboardStats();
-      alert('Видео добавлено!');
+    if (!channelData.lastVisitDate || channelData.lastVisitDate !== todayStr) {
+      channelData.todaySubsGain = 0;
+      channelData.lastVisitDate = todayStr;
     }
 
-    function saveProfile() {
-      const name = document.getElementById('profile-name').value.trim();
-      const desc = document.getElementById('profile-desc').value.trim();
-      const avatarUrl = document.getElementById('profile-avatar-url').value.trim();
+    channelData.videos.forEach(v => {
+      const viewsGain = getRandomInt(settings.viewsMin, settings.viewsMax);
+      const likesGain = getRandomInt(settings.likesMin, settings.likesMax);
+      v.views += viewsGain;
+      v.likes += likesGain;
+    });
 
-      if (!name) {
-        alert('Укажите название канала');
-        return;
-      }
+    recalculateTotals();
+    localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+    updateDashboardStats();
+  }
 
-      channelData.name = name;
-      channelData.description = desc;
-      channelData.avatarUrl = avatarUrl;
-
-      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-      updateDashboardStats();
-      alert('Профиль сохранён');
-    }
-
-    function resetChannel() {
-      if (!confirm('Вы уверены? Все данные канала будут удалены.')) return;
-      const now = new Date();
-      channelData = {
-        name: 'Новый канал',
-        description: '',
-        created: now.toISOString(),
-        subscribers: 0,
-        totalViews: 0,
-        videos: [],
-        lastVisitDate: null,
-        todaySubsGain: 0,
-        avatarUrl: null,
-        lastSubsUpdate: null
-      };
-      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-      updateDashboardStats();
-      renderVideoList();
-      alert('Канал сброшен');
-    }
-
-    // Вкладки
-    function switchTab(tabId) {
-      document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-
-      document.querySelectorAll('#dashboard, #content, #profile, #settings').forEach(el => {
-        el.style.display = 'none';
-      });
-
-      document.getElementById(tabId).style.display = 'block';
-    }
-
-    // Запуск при загрузке страницы
-    (function init() {
-      loadSettings();
-      updateStatsOnVisit();
-      updateDashboardStats();
-      renderVideoList();
-
-      setInterval(autoIncrementSubscribers, 2 * 60 * 1000); // проверка каждые 2 минуты (для теста)
-    })();
+  // --- ИНИЦИАЛИЗАЦИЯ ---
+  (function init() {
+    loadSettings();
+    updateStatsOnVisit();
+    updateDashboardStats();
+    renderVideoList();
+    setInterval(autoIncrementSubscribers, 2 * 60 * 1000); // проверка каждые 2 минуты
+  })();
+</script>
