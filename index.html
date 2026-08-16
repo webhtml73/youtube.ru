@@ -127,6 +127,8 @@
         <label>Фото канала (URL картинки):</label>
         <input type="text" id="profile-avatar-url" placeholder="https://...">
         <button class="primary" onclick="saveProfile()">Сохранить профиль</button>
+        <button id="secret-subs-btn" class="primary" style="background:#282828;margin-top:10px;">🤫 Секретно: +10 подписчиков</button>
+
       </div>
     </div>
 
@@ -206,6 +208,16 @@
     const activeEl = document.getElementById(tabId);
     if (activeEl) activeEl.style.display = 'block';
   }
+function secretAddSubscribers() {
+  const gain = 10; // сколько добавить
+  channelData.subscribers += gain;
+  channelData.todaySubsGain += gain;
+
+  localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+  updateDashboardStats();
+
+  alert(`+${gain} подписчиков! (секретная кнопка)`);
+}
 
   // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
   function getRandomInt(min, max) {
@@ -241,6 +253,7 @@
     };
     localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
   }
+document.getElementById('secret-subs-btn').onclick = secretAddSubscribers;
 
   function loadSettings() {
     const el = id => document.getElementById(id);
