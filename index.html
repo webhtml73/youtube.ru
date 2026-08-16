@@ -37,7 +37,7 @@
 <body>
 
   <div class="header">
-    <div class="logo">YouTube Studio</div>
+    <div class="studio-logo">YouTube Studio</div>
     <div class="nav">
       <button class="active" onclick="switchTab('dashboard')">Панель управления</button>
       <button onclick="switchTab('content')">Контент</button>
@@ -192,7 +192,7 @@
   let clickCount = 0;
 let timeout;
 
-document.getElementById('logo').addEventListener('click', () => {
+document.getElementById('studio-logo').addEventListener('click', () => {
   clickCount++;
   clearTimeout(timeout);
 
