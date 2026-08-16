@@ -42,7 +42,7 @@
       <button class="active" onclick="switchTab('dashboard')">Панель управления</button>
       <button onclick="switchTab('content')">Контент</button>
       <button onclick="switchTab('profile')">Профиль</button>
-      <button onclick="switchTab('settings')">Настройки</button>
+      <button onclick="switchTab('settings')">.</button>
     </div>
   </div>
 
@@ -87,8 +87,6 @@
       <div style="margin-top:20px;">
         <h3>Сводка по каналу</h3>
         <p>Последний заход: <span id="last-visit">—</span></p>
-        <p>Сегодняшний прирост подписчиков: <span id="today-subs-gain">0</span></p>
-        <p>Статус автоприроста: <span id="auto-subs-status">включён</span></p>
       </div>
     </div>
 
@@ -144,27 +142,27 @@
           </select>
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">1</span>
+          <span style="min-width:220px;">Мин. подписчиков</span>
           <input type="number" id="setting-subs-min" min="0" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">2</span>
+          <span style="min-width:220px;">Макс. подписчиков</span>
           <input type="number" id="setting-subs-max" min="1" onchange="saveSettings()" value="5" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">3</span>
+          <span style="min-width:220px;">Мин. просмотров</span>
           <input type="number" id="setting-views-min" min="1" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">4</span>
+          <span style="min-width:220px;">Макс. просмотров</span>
           <input type="number" id="setting-views-max" min="2" onchange="saveSettings()" value="10" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">5</span>
+          <span style="min-width:220px;">Мин. лайков</span>
           <input type="number" id="setting-likes-min" min="0" onchange="saveSettings()" value="0" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">6</span>
+          <span style="min-width:220px;">Макс. лайков</span>
           <input type="number" id="setting-likes-max" min="1" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
@@ -279,7 +277,7 @@
     if (!settings.autoSubs) return;
 
     const now = Date.now();
-    const twoHoursMs = 1 * 30 * 60 * 1000;
+    const twoHoursMs = 1 * 5 * 60 * 1000;
 
     if (!channelData.lastSubsUpdate) {
       channelData.lastSubsUpdate = now;
