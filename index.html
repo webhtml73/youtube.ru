@@ -137,34 +137,34 @@
       <h2>Настройки канала</h2>
       <div class="settings-section">
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">Включить автоприрост подписчиков каждые 2 ч</span>
+          <span style="min-width:220px;">Включить информацию</span>
           <select id="setting-auto-subs" onchange="saveSettings()">
             <option value="1">Включено</option>
             <option value="0">Выключено</option>
           </select>
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">Мин. прирост подписчиков за 2 ч</span>
+          <span style="min-width:220px;">1</span>
           <input type="number" id="setting-subs-min" min="0" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">Макс. прирост подписчиков за 2 ч</span>
+          <span style="min-width:220px;">2</span>
           <input type="number" id="setting-subs-max" min="1" onchange="saveSettings()" value="5" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">Мин. прирост просмотров при заходе</span>
+          <span style="min-width:220px;">3</span>
           <input type="number" id="setting-views-min" min="1" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">Макс. прирост просмотров при заходе</span>
+          <span style="min-width:220px;">4</span>
           <input type="number" id="setting-views-max" min="2" onchange="saveSettings()" value="10" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">Мин. лайки при заходе (на видео)</span>
+          <span style="min-width:220px;">5</span>
           <input type="number" id="setting-likes-min" min="0" onchange="saveSettings()" value="0" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="min-width:220px;">Макс. лайки при заходе (на видео)</span>
+          <span style="min-width:220px;">6</span>
           <input type="number" id="setting-likes-max" min="1" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
         <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
@@ -218,7 +218,7 @@
   let settings = JSON.parse(localStorage.getItem('yt_studio_settings')) || {
     autoSubs: true,
     subsMin: 1,
-    subsMax: 5,
+    subsMax: 3,
     viewsMin: 1,
     viewsMax: 10,
     likesMin: 0,
@@ -279,7 +279,7 @@
     if (!settings.autoSubs) return;
 
     const now = Date.now();
-    const twoHoursMs = 2 * 60 * 60 * 1000;
+    const twoHoursMs = 1 * 30 * 30 * 1000;
 
     if (!channelData.lastSubsUpdate) {
       channelData.lastSubsUpdate = now;
