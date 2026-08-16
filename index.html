@@ -127,8 +127,7 @@
         <label>Фото канала (URL картинки):</label>
         <input type="text" id="profile-avatar-url" placeholder="https://...">
         <button class="primary" onclick="saveProfile()">Сохранить профиль</button>
-        <button id="secret-subs-btn" class="primary" style="background:#282828;margin-top:10px;">🤫 Секретно: +10 подписчиков</button>
-
+       
       </div>
     </div>
 
@@ -208,21 +207,35 @@
     const activeEl = document.getElementById(tabId);
     if (activeEl) activeEl.style.display = 'block';
   }
-function secretAddSubscribers() {
-  const gain = 10; // сколько добавить
-  channelData.subscribers += gain;
-  channelData.todaySubsGain += gain;
-
-  localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-  updateDashboardStats();
-
-  alert(`+${gain} подписчиков! (секретная кнопка)`);
-}
 
   // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+let clickCount = 0;
+let timeout;
+
+document.getElementById('studio-logo').addEventListener('click', () => {
+  clickCount++;
+  clearTimeout(timeout);
+
+  if (clickCount === 3) {
+    // тройной клик — срабатывает
+    const gain = 20;
+    channelData.subscribers += gain;
+    channelData.todaySubsGain += gain;
+
+    localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+    updateDashboardStats();
+    alert('🤫 Пасхалка активирована: +20 подписчиков!');
+
+    clickCount = 0;
+  } else {
+    timeout = setTimeout(() => {
+      clickCount = 0;
+    }, 500); // если не кликнули 3 раза за 0.5 сек — сброс
+  }
+});
 
   let channelData = JSON.parse(localStorage.getItem('yt_studio_channel')) || null;
   let settings = JSON.parse(localStorage.getItem('yt_studio_settings')) || {
@@ -253,7 +266,6 @@ function secretAddSubscribers() {
     };
     localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
   }
-document.getElementById('secret-subs-btn').onclick = secretAddSubscribers;
 
   function loadSettings() {
     const el = id => document.getElementById(id);
