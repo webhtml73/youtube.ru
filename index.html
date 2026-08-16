@@ -189,30 +189,7 @@
   </div>
 
 <script>
-  // --- ГЛАВНАЯ ФУНКЦИЯ ДЛЯ ВКЛАДОК (должна быть первой!) ---
-  function switchTab(tabId) {
-    // Подсветка активной кнопки
-    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-    if (event && event.target) {
-      event.target.classList.add('active');
-    }
-
-    // Скрыть все панели
-    ['dashboard', 'content', 'profile', 'settings'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
-
-    // Показать нужную панель
-    const activeEl = document.getElementById(tabId);
-    if (activeEl) activeEl.style.display = 'block';
-  }
-
-  // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
-  function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-let clickCount = 0;
+  let clickCount = 0;
 let timeout;
 
 document.getElementById('studio-logo').addEventListener('click', () => {
@@ -236,6 +213,30 @@ document.getElementById('studio-logo').addEventListener('click', () => {
     }, 500); // если не кликнули 3 раза за 0.5 сек — сброс
   }
 });
+
+  // --- ГЛАВНАЯ ФУНКЦИЯ ДЛЯ ВКЛАДОК (должна быть первой!) ---
+  function switchTab(tabId) {
+    // Подсветка активной кнопки
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    if (event && event.target) {
+      event.target.classList.add('active');
+    }
+
+    // Скрыть все панели
+    ['dashboard', 'content', 'profile', 'settings'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    // Показать нужную панель
+    const activeEl = document.getElementById(tabId);
+    if (activeEl) activeEl.style.display = 'block';
+  }
+
+  // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
   let channelData = JSON.parse(localStorage.getItem('yt_studio_channel')) || null;
   let settings = JSON.parse(localStorage.getItem('yt_studio_settings')) || {
