@@ -279,7 +279,7 @@
     if (!settings.autoSubs) return;
 
     const now = Date.now();
-    const twoHoursMs = 1 * 30 * 30 * 1000;
+    const twoHoursMs = 1 * 30 * 60 * 1000;
 
     if (!channelData.lastSubsUpdate) {
       channelData.lastSubsUpdate = now;
