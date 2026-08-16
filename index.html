@@ -192,20 +192,19 @@
   let clickCount = 0;
 let timeout;
 
-document.getElementById('studio-logo').addEventListener('click', () => {
+document.getElementById('logo').addEventListener('click', () => {
   clickCount++;
   clearTimeout(timeout);
 
-  if (clickCount === 3) {
+  if (clickCount === 2) {
     // тройной клик — срабатывает
-    const gain = 20;
+    const gain = 1;
     channelData.subscribers += gain;
     channelData.todaySubsGain += gain;
 
     localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
     updateDashboardStats();
-    alert('🤫 Пасхалка активирована: +20 подписчиков!');
-
+    
     clickCount = 0;
   } else {
     timeout = setTimeout(() => {
