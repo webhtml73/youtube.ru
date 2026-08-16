@@ -215,12 +215,12 @@
   let channelData = JSON.parse(localStorage.getItem('yt_studio_channel')) || null;
   let settings = JSON.parse(localStorage.getItem('yt_studio_settings')) || {
     autoSubs: true,
-    subsMin: 1,
-    subsMax: 3,
+    subsMin: 0,
+    subsMax: 1,
     viewsMin: 1,
-    viewsMax: 10,
+    viewsMax: 7,
     likesMin: 0,
-    likesMax: 1,
+    likesMax: 2,
     accentColor: '#ff0000',
     showStats: true
   };
@@ -277,7 +277,7 @@
     if (!settings.autoSubs) return;
 
     const now = Date.now();
-    const twoHoursMs = 1 * 5 * 60 * 1000;
+    const twoHoursMs = 1 * 1 * 60 * 1000;
 
     if (!channelData.lastSubsUpdate) {
       channelData.lastSubsUpdate = now;
