@@ -37,7 +37,8 @@
 <body>
 
   <div class="header">
-    <div class="studio-logo">YouTube Studio</div>
+  <div class="logo" id="studio-logo">YouTube Studio</div>
+
     <div class="nav">
       <button class="active" onclick="switchTab('dashboard')">Панель управления</button>
       <button onclick="switchTab('content')">Контент</button>
@@ -189,29 +190,32 @@
   </div>
 
 <script>
+const logoEl = document.getElementById('studio-logo');
+if (logoEl) {
   let clickCount = 0;
-let timeout;
+  let timeout;
 
-document.getElementById('studio-logo').addEventListener('click', () => {
-  clickCount++;
-  clearTimeout(timeout);
+  logoEl.addEventListener('click', () => {
+    clickCount++;
+    clearTimeout(timeout);
 
-  if (clickCount === 2) {
-    // тройной клик — срабатывает
-    const gain = 1;
-    channelData.subscribers += gain;
-    channelData.todaySubsGain += gain;
+    if (clickCount === 2) {
+      const gain = 2;
+      channelData.subscribers += gain;
+      channelData.todaySubsGain += gain;
 
-    localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
-    updateDashboardStats();
-    
-    clickCount = 0;
-  } else {
-    timeout = setTimeout(() => {
+      localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+      updateDashboardStats();
+  
       clickCount = 0;
-    }, 500); // если не кликнули 3 раза за 0.5 сек — сброс
-  }
-});
+    } else {
+      timeout = setTimeout(() => {
+        clickCount = 0;
+      }, 500);
+    }
+  });
+}
+
 
   // --- ГЛАВНАЯ ФУНКЦИЯ ДЛЯ ВКЛАДОК (должна быть первой!) ---
   function switchTab(tabId) {
