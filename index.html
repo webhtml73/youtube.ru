@@ -27,25 +27,15 @@
     .stat-card { background: var(--panel); border: 1px solid var(--border); padding: 15px; border-radius: 6px; }
     .stat-value { font-size: 24px; font-weight: bold; }
     .channel-info { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-    .avatar-box {
-      width: 80px; height: 80px; background: #ddd; border-radius: 50%; overflow: hidden; position: relative;
-    }
+    .avatar-box { width: 80px; height: 80px; background: #ddd; border-radius: 50%; overflow: hidden; position: relative; }
     .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
     .upload-section, .profile-section, .settings-section { margin-top: 20px; }
     input, textarea, select { padding: 8px; border: 1px solid var(--border); border-radius: 4px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
-    button.primary {
-      background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer;
-    }
-    .video-details-block { margin-top: 15px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #eee; }
-    .view-btn {
-      display: inline-block; margin-top: 8px; padding: 6px 12px; background: #333; color: white; text-decoration: none; border-radius: 4px;
-      font-size: 13px;
-    }
-    .setting-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
-    .setting-label { min-width: 220px; }
+    button.primary { background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; }
   </style>
 </head>
 <body>
+
   <div class="header">
     <div class="logo">YouTube Studio</div>
     <div class="nav">
@@ -146,51 +136,51 @@
     <div id="settings" class="panel" style="display:none;">
       <h2>Настройки канала</h2>
       <div class="settings-section">
-        <div class="setting-row">
-          <span class="setting-label">Включить автоприрост подписчиков каждые 2 ч</span>
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Включить автоприрост подписчиков каждые 2 ч</span>
           <select id="setting-auto-subs" onchange="saveSettings()">
             <option value="1">Включено</option>
             <option value="0">Выключено</option>
           </select>
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Мин. прирост подписчиков за 2 ч</span>
-          <input type="number" id="setting-subs-min" min="0" onchange="saveSettings()" value="1">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Мин. прирост подписчиков за 2 ч</span>
+          <input type="number" id="setting-subs-min" min="0" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Макс. прирост подписчиков за 2 ч</span>
-          <input type="number" id="setting-subs-max" min="1" onchange="saveSettings()" value="5">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Макс. прирост подписчиков за 2 ч</span>
+          <input type="number" id="setting-subs-max" min="1" onchange="saveSettings()" value="5" style="width:auto;">
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Мин. прирост просмотров при заходе</span>
-          <input type="number" id="setting-views-min" min="1" onchange="saveSettings()" value="1">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Мин. прирост просмотров при заходе</span>
+          <input type="number" id="setting-views-min" min="1" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Макс. прирост просмотров при заходе</span>
-          <input type="number" id="setting-views-max" min="2" onchange="saveSettings()" value="10">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Макс. прирост просмотров при заходе</span>
+          <input type="number" id="setting-views-max" min="2" onchange="saveSettings()" value="10" style="width:auto;">
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Мин. лайки при заходе (на видео)</span>
-          <input type="number" id="setting-likes-min" min="0" onchange="saveSettings()" value="0">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Мин. лайки при заходе (на видео)</span>
+          <input type="number" id="setting-likes-min" min="0" onchange="saveSettings()" value="0" style="width:auto;">
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Макс. лайки при заходе (на видео)</span>
-          <input type="number" id="setting-likes-max" min="1" onchange="saveSettings()" value="1">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Макс. лайки при заходе (на видео)</span>
+          <input type="number" id="setting-likes-max" min="1" onchange="saveSettings()" value="1" style="width:auto;">
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Цвет акцента (HEX)</span>
-          <input type="color" id="setting-accent-color" onchange="saveSettings()" value="#ff0000">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Цвет акцента (HEX)</span>
+          <input type="color" id="setting-accent-color" onchange="saveSettings()" value="#ff0000" style="width:auto;padding:4px;">
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Показывать расширенную статистику</span>
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Показывать расширенную статистику</span>
           <select id="setting-show-stats" onchange="saveSettings()">
             <option value="1">Да</option>
             <option value="0">Нет</option>
           </select>
         </div>
-        <div class="setting-row">
-          <span class="setting-label">Сбросить канал (удалить все данные)</span>
-          <button class="primary" style="background:#d9534f;" onclick="resetChannel()">Сбросить канал</button>
+        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="min-width:220px;">Сбросить канал (удалить все данные)</span>
+          <button class="primary" style="background:#d9534f;width:auto;" onclick="resetChannel()">Сбросить канал</button>
         </div>
         <div style="margin-top:15px; font-size:13px; color:#666;">
           Настройки сохраняются автоматически при изменении.
@@ -229,12 +219,11 @@
         lastVisitDate: null,
         todaySubsGain: 0,
         avatarUrl: null,
-        lastSubsUpdate: null // время последнего прироста подписчиков
+        lastSubsUpdate: null
       };
       localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
     }
 
-    // Загрузка настроек
     function loadSettings() {
       document.getElementById('setting-auto-subs').value = settings.autoSubs ? '1' : '0';
       document.getElementById('setting-subs-min').value = settings.subsMin;
@@ -246,7 +235,6 @@
       document.getElementById('setting-accent-color').value = settings.accentColor;
       document.getElementById('setting-show-stats').value = settings.showStats ? '1' : '0';
 
-      // Применяем цвет акцента
       document.documentElement.style.setProperty('--accent', settings.accentColor);
     }
 
@@ -264,33 +252,27 @@
       document.documentElement.style.setProperty('--accent', settings.accentColor);
       localStorage.setItem('yt_studio_settings', JSON.stringify(settings));
     }
-
-    // Обновление статистики при каждом заходе
-    function updateStatsOnVisit() {
       const now = new Date();
-      const todayDateStr = now.toISOString().split('T')[0];
+      const todayStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
 
-      if (!channelData.lastVisitDate) {
-        channelData.lastVisitDate = todayDateStr;
-      } else {
-        if (channelData.lastVisitDate !== todayDateStr) {
-          const subsGain = getRandomInt(settings.subsMin, settings.subsMax);
-          channelData.subscribers += subsGain;
-          channelData.todaySubsGain = subsGain;
-          channelData.lastVisitDate = todayDateStr;
-        } else {
-          channelData.todaySubsGain = 0;
-        }
+      // Если это первый визит или день сменился — сбрасываем дневной прирост
+      if (!channelData.lastVisitDate || channelData.lastVisitDate !== todayStr) {
+        channelData.todaySubsGain = 0;
+        channelData.lastVisitDate = todayStr;
       }
 
-      // Увеличиваем просмотры и лайки у всех видео при каждом заходе
+      // При каждом заходе добавляем просмотры и лайки (случайные в диапазоне настроек)
       channelData.videos.forEach(v => {
-        v.views += getRandomInt(settings.viewsMin, settings.viewsMax);
-        v.likes += getRandomInt(settings.likesMin, settings.likesMax);
+        const viewsGain = getRandomInt(settings.viewsMin, settings.viewsMax);
+        const likesGain = getRandomInt(settings.likesMin, settings.likesMax);
+
+        v.views += viewsGain;
+        v.likes += likesGain;
       });
 
       recalculateTotals();
       localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
+      updateDashboardStats();
     }
 
     // Прирост подписчиков каждые 2 часа (только если есть хотя бы одно видео)
@@ -300,7 +282,6 @@
       const now = Date.now();
       const twoHoursMs = 2 * 60 * 60 * 1000;
 
-      // Если ещё не было времени последнего обновления — ставим сейчас и не добавляем подписчиков сразу
       if (!channelData.lastSubsUpdate) {
         channelData.lastSubsUpdate = now;
         localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
@@ -309,18 +290,16 @@
 
       const timeSinceLast = now - channelData.lastSubsUpdate;
 
-      // Проверяем, прошло ли 2 часа
       if (timeSinceLast >= twoHoursMs) {
-        // Автоприрост только если есть хотя бы одно видео
         if (channelData.videos.length > 0) {
           const subsGain = getRandomInt(settings.subsMin, settings.subsMax);
           channelData.subscribers += subsGain;
-          // Сбрасываем таймер на текущее время
+          channelData.todaySubsGain += subsGain; // считаем в дневной прирост
           channelData.lastSubsUpdate = now;
           localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
           updateDashboardStats();
         } else {
-          // Если видео нет — просто обновляем время, чтобы не спамить приростом при появлении первого видео
+          // Даже если видео нет — обновляем время, чтобы не спамить приростом при появлении первого видео
           channelData.lastSubsUpdate = now;
           localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
         }
@@ -352,26 +331,27 @@
     function updateDashboardStats() {
       const stats = recalculateTotals();
 
-      document.getElementById('stat-views').textContent = stats.totalViews.toLocaleString();
-      document.getElementById('stat-subs').textContent = channelData.subscribers.toLocaleString();
-      document.getElementById('stat-videos').textContent = channelData.videos.length;
-      document.getElementById('stat-avg-views').textContent = stats.avgViews.toLocaleString();
-      document.getElementById('stat-like-ratio').textContent = stats.likeRatio + '%';
-      document.getElementById('stat-total-likes').textContent = stats.totalLikes.toLocaleString();
+      const el = id => document.getElementById(id);
+      el('stat-views').textContent = stats.totalViews.toLocaleString();
+      el('stat-subs').textContent = channelData.subscribers.toLocaleString();
+      el('stat-videos').textContent = channelData.videos.length;
+      el('stat-avg-views').textContent = stats.avgViews.toLocaleString();
+      el('stat-like-ratio').textContent = stats.likeRatio + '%';
+      el('stat-total-likes').textContent = stats.totalLikes.toLocaleString();
 
-      document.getElementById('today-subs-gain').textContent = channelData.todaySubsGain;
-      document.getElementById('auto-subs-status').textContent = settings.autoSubs ? 'включён' : 'выключен';
+      el('today-subs-gain').textContent = channelData.todaySubsGain;
+      el('auto-subs-status').textContent = settings.autoSubs ? 'включён' : 'выключен';
 
       const dateObj = new Date(channelData.created);
-      document.getElementById('channel-date').textContent = dateObj.toLocaleDateString('ru-RU');
-      document.getElementById('channel-name').textContent = channelData.name;
-      document.getElementById('channel-desc').textContent = channelData.description || '—';
+      el('channel-date').textContent = dateObj.toLocaleDateString('ru-RU');
+      el('channel-name').textContent = channelData.name;
+      el('channel-desc').textContent = channelData.description || '—';
 
+      const avatarBox = el('channel-avatar-box');
       if (channelData.avatarUrl) {
-        document.getElementById('channel-avatar-box').innerHTML =
-          `<img src="${channelData.avatarUrl}" alt="avatar">`;
+        avatarBox.innerHTML = `<img src="${channelData.avatarUrl}" alt="avatar">`;
       } else {
-        document.getElementById('channel-avatar-box').innerHTML = '';
+        avatarBox.innerHTML = '';
       }
     }
 
@@ -423,14 +403,12 @@
       recalculateTotals();
       localStorage.setItem('yt_studio_channel', JSON.stringify(channelData));
 
-      // Сброс полей
       document.getElementById('video-title').value = '';
       document.getElementById('video-topic').value = '';
       document.getElementById('video-desc').value = '';
 
       renderVideoList();
       updateDashboardStats();
-
       alert('Видео добавлено!');
     }
 
@@ -493,6 +471,5 @@
       updateDashboardStats();
       renderVideoList();
 
-      // Запускаем автоприрост каждые 2 минуты (для теста), а в реальности это сработает по интервалу 2 часа внутри функции
-      setInterval(autoIncrementSubscribers, 2 * 60 * 1000);
+      setInterval(autoIncrementSubscribers, 2 * 60 * 1000); // проверка каждые 2 минуты (для теста)
     })();
